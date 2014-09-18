@@ -85,10 +85,9 @@ void load(byte MSB, byte LSB)
   digitalWrite(CLK, LOW); //Put the clk hi
   delayMicroseconds(50);
   digitalWrite(CLK, HIGH); //Put the clk hi
-  delayMicroseconds(5);
-  latch(LOW);
-  delay(1);
-  latch(HIGH);
+  delayMicroseconds(10);
+  digitalWrite(CLK, LOW); //Put the clk hi
+
 
 }
 
