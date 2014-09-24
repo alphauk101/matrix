@@ -4,7 +4,7 @@ int DIN = 2;
 int CS = 3;
 int CLK = 4;
 
-int GAME_LVL;
+static int GAME_LVL;
 
 byte matrixData[8];//Our buffer so that we can send the display class what we want to display.
 
@@ -48,7 +48,7 @@ void gameLoop(){
   boolean gameRunning = true;
   //First we need to calculate exactly everything that should be on the screen based on the game variables.
   //What level are we.
-  gameSpeed = (GAME_LVL*100);//First set our speed (effectively the speed of the loop.
+  gameSpeed = ((GAME_LVL+10)*10);//First set our speed (effectively the speed of the loop.
 
   while(gameRunning == true){
     //The game loop will run whist the gameRunnning variable is true;
@@ -65,7 +65,7 @@ void gameLoop(){
     }
     processFrame(GAME_LVL,paddleSize);//display next frame.
 
-    //We now our paddle size. We know our Cursor, so lets display it.
+    delay(gameSpeed);//This is important because this effects the overall gamespeed/difficulty.
 
   }
 
@@ -75,15 +75,50 @@ void gameLoop(){
 int paddleDir=0;//Use to determine which way the paddle show be moving
 int gameCursor=0;
 void processFrame(int level, int pSize){
+  Serial.println(gameCursor,HEX);
   //We know how many px to make the paddle from pSize and we know what column by the level.
+  resetMatrix();//This is important so our prevous data doesnt corrupt the new.
   if(paddleDir==0){
     //We are going this way
     //we need to establish which column is effected
-    
-  }
-  else{
 
+    for(int a = 0; a < pSize; a++)
+    {
+      //Foreach pixel of paddle sixe
+      matrixData[gameCursor+a] = ((0xFF) & (1<<level));
+    }
+    gameCursor++;
+    if((gameCursor+pSize) == 8){
+      paddleDir=1;
+    }
   }
+  else
+  {
+    for(int a = 0; a < pSize; a++)
+    {
+      //Foreach pixel of paddle sixe
+      matrixData[gameCursor+a] = ((0xFF) & (1<<level));
+    }
+    gameCursor--;
+    if((gameCursor+pSize) == pSize)
+    {
+      paddleDir=0;
+    }
+  }
+
+
+  matrix.updateDisplay(matrixData);
+}
+
+void resetMatrix(){
+  matrixData[0]=0;
+  matrixData[1]=0;
+  matrixData[2]=0;
+  matrixData[3]=0;
+  matrixData[4]=0;
+  matrixData[5]=0;
+  matrixData[6]=0;
+  matrixData[7]=0;  
 }
 
 /*************
@@ -92,6 +127,11 @@ void processFrame(int level, int pSize){
 void newGame(){
   GAME_LVL=0;
 }
+
+
+
+
+
 
 
 
