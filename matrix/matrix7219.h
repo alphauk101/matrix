@@ -10,7 +10,7 @@
 #define DECODEMODE_CODE_B_D1-3_NO_DECODE_D4-7 0x0F
 #define DECODEMODE_CODE_B_D0-7 0xFF
 //Data defines
-#define CLOCK_PULSE_WIDTH 5//In Micro seconds
+#define CLOCK_PULSE_WIDTH 10//In Micro seconds
 
 
 class Matrix{

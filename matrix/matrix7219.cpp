@@ -77,13 +77,14 @@ void Matrix::shift(byte MSB, byte LSB)
       digitalWrite(DINpin, LOW);
     }
     //First latch our bit
-    delayMicroseconds(CLOCK_PULSE_WIDTH);
+    delayMicroseconds(CLOCK_PULSE_WIDTH*2);
     setClock(HIGH);
     delayMicroseconds(CLOCK_PULSE_WIDTH);//Clock pulse.
     setClock(LOW); //Put the clk hi
     delayMicroseconds(CLOCK_PULSE_WIDTH);//Clock pulse.
   }
-  delayMicroseconds(CLOCK_PULSE_WIDTH);
+  
+  //delayMicroseconds(CLOCK_PULSE_WIDTH);
   for (int a = 7; a >= 0; a--){
     delayMicroseconds(1);
     if ((LSB & (1 << a)) == (0xFF & (1 << a))){
@@ -93,7 +94,7 @@ void Matrix::shift(byte MSB, byte LSB)
       //Its a low bit
       digitalWrite(DINpin, LOW);
     }
-    delayMicroseconds(CLOCK_PULSE_WIDTH);
+    delayMicroseconds(CLOCK_PULSE_WIDTH*2);
     setClock(HIGH);
     delayMicroseconds(CLOCK_PULSE_WIDTH);//Clock pulse.
     setClock(LOW); //Put the clk hi
@@ -101,7 +102,7 @@ void Matrix::shift(byte MSB, byte LSB)
   }
 
   setLatch(HIGH);
-  delayMicroseconds(10);//This latches our data in.
+  delayMicroseconds(5);//This latches our data in.
   setLatch(LOW);
   delayMicroseconds(CLOCK_PULSE_WIDTH);
   setClock(HIGH); //Put the clk hi
