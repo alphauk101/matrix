@@ -4,8 +4,9 @@ int DIN = 2;
 int CS = 3;
 int CLK = 4;
 
-byte columns[8];//This represents each column
-byte columns2[8];
+int GAME_LVL;
+
+byte matrixData[8];//Our buffer so that we can send the display class what we want to display.
 
 //Create our new class object
 Matrix matrix;
@@ -13,38 +14,84 @@ Matrix matrix;
 void setup() {
   //Init our driver.
   matrix.initDisplay(DIN,CS,CLK);
-
   Serial.begin(9600);
   delay(1000);
-
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
 
-  columns[0] = 0xFF;
-  columns[1] = 0x18; 
-  columns[2] = 0x18; 
-  columns[3] = 0x18; 
-  columns[4] = 0x18; 
-  columns[5] = 0x18; 
-  columns[6] = 0x18; 
-  columns[7] = 0xFF; 
-  
-  matrix.updateDisplay(columns);
-  delay(50);
-  
-  columns2[0] = 0x55;
-  columns2[1] = 0xAA; 
-  columns2[2] = 0x55; 
-  columns2[3] = 0xAA; 
-  columns2[4] = 0x55; 
-  columns2[5] = 0xAA; 
-  columns2[6] = 0x55; 
-  columns2[7] = 0xAA; 
+  //We need to set anything here before we start our main game loop
 
-  //matrix.updateDisplay(columns2);
-  delay(50);
+    newGame();//Resets the game to beginning.
+  /*
+  matrixData[0] = 0x10;
+   matrixData[1] = 0x02;
+   matrixData[2] = 0x04;
+   matrixData[3] = 0x08;
+   matrixData[4] = 0x10;
+   matrixData[5] = 0x20;
+   matrixData[6] = 0x40;
+   matrixData[7] = 0x80;
+   matrix.updateDisplay(matrixData);
+   delay(1000);
+   */
+  gameLoop();//Start the game.
 }
+
+
+/**********************************
+ * //This represents are main game loop
+ ***********************************/
+void gameLoop(){
+  int gameSpeed;
+  int paddleSize;
+  boolean gameRunning = true;
+  //First we need to calculate exactly everything that should be on the screen based on the game variables.
+  //What level are we.
+  gameSpeed = (GAME_LVL*100);//First set our speed (effectively the speed of the loop.
+
+  while(gameRunning == true){
+    //The game loop will run whist the gameRunnning variable is true;
+
+    //Depending on what the game level is determines the paddle size.
+    if(GAME_LVL < 3){//Our paddle size depends on the gae level.
+      paddleSize=3;//This means that our paddle is 3 pixels big
+    } 
+    else if(GAME_LVL < 5){
+      paddleSize=2;
+    }
+    else{
+      paddleSize=1;
+    }
+    processFrame(GAME_LVL,paddleSize);//display next frame.
+
+    //We now our paddle size. We know our Cursor, so lets display it.
+
+  }
+
+}
+
+
+int paddleDir=0;//Use to determine which way the paddle show be moving
+int gameCursor=0;
+void processFrame(int level, int pSize){
+  //We know how many px to make the paddle from pSize and we know what column by the level.
+  if(paddleDir==0){
+    //We are going this way
+    //we need to establish which column is effected
+    
+  }
+  else{
+
+  }
+}
+
+/*************
+ * //Resets all the parameters for a new game.
+ *************/
+void newGame(){
+  GAME_LVL=0;
+}
+
 
 
