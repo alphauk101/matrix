@@ -30,15 +30,7 @@ void loop() {
 
   newGame();//Resets the game to beginning.
   /*
-  matrixData[0] = 0x10;
-   matrixData[1] = 0x02;
-   matrixData[2] = 0x04;
-   matrixData[3] = 0x08;
-   matrixData[4] = 0x10;
-   matrixData[5] = 0x20;
-   matrixData[6] = 0x40;
-   matrixData[7] = 0x80;
-   matrix.updateDisplay(matrixData);
+
    delay(1000);
    */
   gameLoop();//Start the game.
@@ -66,6 +58,29 @@ void gameOver()
 
   newGame();//Resets the game to beginning.
   gameLoop();//Start the game.
+}
+
+void gameWin() {
+
+  byte dispByte = 0;
+  for (int a = 0; a < 64; a++)
+  {
+    dispByte = ((dispByte + dispByte) + 1);
+
+    matrixData[0] = dispByte;
+    matrixData[1] = dispByte;
+    matrixData[2] = dispByte;
+    matrixData[3] = dispByte;
+    matrixData[4] = dispByte;
+    matrixData[5] = dispByte;
+    matrixData[6] = dispByte;
+    matrixData[7] = dispByte;
+    matrix.updateDisplay(matrixData);
+    delay(75);
+
+    if (dispByte == 255) dispByte = 0;
+  }
+
 }
 
 /**********************************
@@ -127,7 +142,7 @@ void gameLoop() {
 
     if (GAME_LVL != 8)
     {
-      gameSpeed = (200 - (GAME_LVL * 25));
+      gameSpeed = (200 - (GAME_LVL * 35));
 
       //Depending on what the game level is determines the paddle size.
 
@@ -146,6 +161,7 @@ void gameLoop() {
       //delay(1000);
     }
     else {
+      gameWin();
       gameRunning = false;//GAME OVER MAN!
     }
   }
